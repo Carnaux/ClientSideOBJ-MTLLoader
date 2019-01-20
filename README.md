@@ -54,7 +54,7 @@ https://codepen.io/shahrin14/pen/VzvPdB?editors=1010
 
           objects.push(obj);
       }
-   }
+    }
 
     function onChooseFile(event, onLoadFileHandler) {
            if (typeof window.FileReader !== "function")
