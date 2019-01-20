@@ -38,9 +38,29 @@ function onFileLoad(event) {
 
   let objLoader = new THREE.OBJLoader();
 
-  var geometry = objLoader.parse(modelData);
-  geometry.position.set(0, 0, 0);
-  scene.add(geometry);
+  let geometry = objLoader.parse(modelData);
+  
+  let pos = new THREE.Vector3(0,0,5);
+ //scene.add(geometry);
+  console.log(geometry);
+  if (geometry.children.length > 0) {
+    for (let i = 0; i < geometry.children.length; i++) {
+      let obj = new THREE.Mesh(
+        geometry.children[i].geometry,
+        geometry.children[i].material
+      );
+      obj.position.copy(pos);
+      scene.add(obj);
+
+      objects.push(obj);
+    }
+  } else {
+    let obj = new THREE.Mesh(geometry.geometry, geometry.material);
+    obj.position.copy(pos);
+    scene.add(obj);
+
+    objects.push(obj);
+  }
 }
 
 function onChooseFile(event, onLoadFileHandler) {
