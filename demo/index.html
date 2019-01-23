@@ -12,18 +12,22 @@
     </style>
   </head>
   <body>
-    <div id="render"></div>
     <div id="overlay">
-      Add a file:<input
+      Add a model:<input
         type="file"
-        onchange="onChooseFile(event, onFileLoad.bind(this))"
+        onchange="onChooseFile(event, onModelLoad.bind(this))"
       />
-      <p id="contents"></p>
+      Add a material:<input
+        type="file"
+        onchange="onChooseFile(event, onMaterialLoad.bind(this))"
+      />Load: <button id="loadBT" onclick="loadOBJMTL()">Load</button>
     </div>
+    <div id="render"></div>
 
     <script src="three.js"></script>
     <script src="Orbit.js"></script>
     <script src="OBJLoader.js"></script>
+    <script src="MTLLoader.js"></script>
     <script src="j1.js"></script>
   </body>
 </html>

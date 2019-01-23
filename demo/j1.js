@@ -1,5 +1,10 @@
+let loadedModels = [];
+
+let loadedMaterials = [];
+
 var scene = new THREE.Scene();
-scene.background = new THREE.Color(40, 40, 40);
+scene.background = new THREE.Color("rgb(63,63,63)");
+
 var camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
@@ -13,36 +18,30 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const renderDiv = document.getElementById("render");
 renderDiv.appendChild(renderer.domElement);
 
-var geometry = new THREE.BoxGeometry(1, 1, 1);
-var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-var cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+const light = new THREE.AmbientLight(0x404040, 2); // soft white light
+scene.add(light);
 
 camera.position.z = 5;
 
 var animate = function() {
   requestAnimationFrame(animate);
   controls.update();
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
 
   renderer.render(scene, camera);
 };
 
 animate();
 
-function onFileLoad(event) {
+function onModelLoad(event) {
   let modelData = event.target.result;
 
   let objLoader = new THREE.OBJLoader();
 
   let geometry = objLoader.parse(modelData);
-  
-  let pos = new THREE.Vector3(0,0,5);
- //scene.add(geometry);
-  console.log(geometry);
+  let pos = new THREE.Vector3(0, 0, 0);
+
   if (geometry.children.length > 0) {
     for (let i = 0; i < geometry.children.length; i++) {
       let obj = new THREE.Mesh(
@@ -50,16 +49,29 @@ function onFileLoad(event) {
         geometry.children[i].material
       );
       obj.position.copy(pos);
-      scene.add(obj);
-
-      objects.push(obj);
+      loadedModels.push(obj);
     }
   } else {
     let obj = new THREE.Mesh(geometry.geometry, geometry.material);
     obj.position.copy(pos);
-    scene.add(obj);
 
-    objects.push(obj);
+    loadedModels.push(obj);
+  }
+}
+
+function onMaterialLoad(event) {
+  let materialData = event.target.result;
+  let mtlLoader = new THREE.MTLLoader();
+  let material = mtlLoader.parse(materialData);
+  let info = material.materialsInfo;
+  for (let name in info) {
+    let newM = material.createMaterial_(name);
+    loadedMaterials.push(newM);
+  }
+  if (loadedMaterials.length > 0) {
+    console.log("materials loaded");
+  } else {
+    console.log("no materials loaded");
   }
 }
 
@@ -75,4 +87,18 @@ function onChooseFile(event, onLoadFileHandler) {
   let fr = new FileReader();
   fr.onload = onLoadFileHandler;
   fr.readAsText(file);
+}
+
+function loadOBJMTL() {
+  if (loadedMaterials.length > 0) {
+    for (let i = 0; i < loadedModels.length; i++) {
+      loadedModels[i].material = loadedMaterials[i];
+      loadedModels[i].needsUpdate = true;
+      scene.add(loadedModels[i]);
+    }
+  } else {
+    for (let i = 0; i < loadedModels.length; i++) {
+      scene.add(loadedModels[i]);
+    }
+  }
 }

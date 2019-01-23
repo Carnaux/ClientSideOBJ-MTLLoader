@@ -6,15 +6,13 @@ https://stackoverflow.com/questions/750032/reading-file-contents-on-the-client-s
 
 and
 
-
 https://codepen.io/shahrin14/pen/VzvPdB?editors=1010
 
 The MTL i wrote the code.
 
 # Download the demo and test it!!!
 
-
-***
+---
 
 ### Create two globals
 
@@ -22,12 +20,15 @@ The MTL i wrote the code.
 
           let loadedMaterials = [];
 
-### Create two inputs
+### Create two inputs and one button
 
           <input type="file" onchange="onChooseFile(event, onModelLoad.bind(this))"/>
-          
+
           <input type="file" onchange="onChooseFile(event, onMaterialLoad.bind(this))"/>
-          
+
+          <button id="loadBT" onclick="loadOBJMTL()">Load</button>
+
+
 ### To add the 3d Model in the scene
 
           function onModelLoad(event) {
