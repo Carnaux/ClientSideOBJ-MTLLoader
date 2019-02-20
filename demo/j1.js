@@ -64,10 +64,21 @@ function onMaterialLoad(event) {
   let mtlLoader = new THREE.MTLLoader();
   let material = mtlLoader.parse(materialData);
   let info = material.materialsInfo;
+   let tempMat = [];
+  let newMatArr;
+
   for (let name in info) {
     let newM = material.createMaterial_(name);
-    loadedMaterials.push(newM);
+    tempMat.push(newM);
   }
+
+  if(tempMat.length > 1){
+    newMatArr = material.getAsArray();
+    loadedMaterials.push(newMatArr);
+  }else if(tempMat.length == 1){
+    loadedMaterials.push(tempMat[0]);
+  }
+  
   if (loadedMaterials.length > 0) {
     console.log("materials loaded");
   } else {
