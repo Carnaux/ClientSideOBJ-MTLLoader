@@ -57,6 +57,8 @@ function onModelLoad(event) {
 
     loadedModels.push(obj);
   }
+  
+  this.value = "";
 }
 
 function onMaterialLoad(event) {
