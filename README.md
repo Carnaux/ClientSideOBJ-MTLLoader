@@ -56,6 +56,8 @@ The MTL i wrote the code.
               loadedModels.push(obj);
               objects.push(obj);
             }
+            
+            this.value = "";
           }
 
           function onMaterialLoad(event) {
